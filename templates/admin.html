@@ -1,0 +1,56 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+</head>
+
+<body>
+    {% for message in messages%}
+    <p>{{message}}</p>
+    {% endfor %}
+    <table>
+        <tr>
+            <th>Client Name</th>
+            <th>Phone Number</th>
+            <th>Car Registration Number</th>
+            <th>Appointment Date</th>
+            <th>Mechanic Name</th>
+            <th>Action</th>
+        </tr>
+        {% for appointment in appointments%}
+        <tr>
+            <td>{{appointment.customer_name}}</td>
+            <td>{{appointment.customer_phone}}</td>
+            <td>{{appointment.car_regi_num}}</td>
+            <td>{{appointment.date}}</td>
+            <td>{{appointment.mechanic}}</td>
+            <td><a href="{% url 'edit' appointment.id %}">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    List of current Mechanics:
+    <ol>
+        {% for mechanic in mechanics%}
+            <li>{{mechanic}}
+            <form method="post" action="{% url 'mechanic_slots' %}">
+                {% csrf_token %}
+                <input type="hidden" name="mechanic" value="{{mechanic.id}}">
+                <input type="date" name="date">
+                <button type="submit">How many slots are free?</button>
+            </form>
+            </li>
+        {% endfor %}
+    </ol>
+
+    <button popovertarget="mechanicForm">Add a new Mechanic</button>
+    <form popover id="mechanicForm" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit">Add</button>
+    </form>
+</body>
+
+</html>

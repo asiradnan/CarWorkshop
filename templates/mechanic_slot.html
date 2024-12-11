@@ -1,0 +1,13 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free slots</title>
+</head>
+<body>
+    {% for a in appointments %}
+    <p>{{a.date}} {{a.customer_name}}</p>
+    {% endfor %}
+    <h3>{{mechanic}} has {{count}} slots free on {{date}}!</h3>
+</body>
+</html>
