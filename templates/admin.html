@@ -30,27 +30,30 @@
         </tr>
         {% endfor %}
     </table>
-    
-    List of current Mechanics:
-    <ol>
-        {% for mechanic in mechanics%}
-            <li>{{mechanic}}
-            <form method="post" action="{% url 'mechanic_slots' %}">
-                {% csrf_token %}
-                <input type="hidden" name="mechanic" value="{{mechanic.id}}">
-                <input type="date" name="date">
-                <button type="submit">How many slots are free?</button>
-            </form>
-            </li>
-        {% endfor %}
-    </ol>
 
-    <button popovertarget="mechanicForm">Add a new Mechanic</button>
-    <form popover id="mechanicForm" method="POST">
-        {% csrf_token %}
-        {{form}}
-        <button type="submit">Add</button>
-    </form>
+    List of current Mechanics:
+    
+
+        <form method="post" action="{% url 'mechanic_slots' %}">
+            {% csrf_token %}
+            
+            <select name="mechanic" id="mechanic">
+                {% for mechanic in mechanics%}
+                <option value="{{mechanic.id}}">{{mechanic}}</option>
+                {% endfor %}
+            </select>
+            
+            
+            <input type="date" name="date">
+            <button type="submit">How many slots are free?</button>
+        </form>
+
+        <button popovertarget="mechanicForm">Add a new Mechanic</button>
+        <form popover id="mechanicForm" method="POST">
+            {% csrf_token %}
+            {{form}}
+            <button type="submit">Add</button>
+        </form>
 </body>
 
 </html>

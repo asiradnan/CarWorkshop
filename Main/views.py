@@ -51,7 +51,10 @@ def edit(request,id):
     if request.method == 'POST':
         form = AppointmentForm(request.POST, instance=appointment)
         if form.is_valid():
-            form.save()
+            x = form.save(commit=False)
+            if Appointments.objects.filter(mechanic = x.mechanic, date=x.date).count() >= 4:
+                messages.error(request, 'Mechanic already booked for this date!')
+                return render(request, 'edit.html', {'form': form, 'appointment': appointment})
             messages.success(request, 'Appointment updated successfully!')
             return HttpResponseRedirect('/admin')
     else:
