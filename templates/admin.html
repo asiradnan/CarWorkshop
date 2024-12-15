@@ -37,14 +37,14 @@
         <form method="post" action="{% url 'mechanic_slots' %}">
             {% csrf_token %}
             
-            <select name="mechanic" id="mechanic">
+            <select name="mechanic" id="mechanic" required>
                 {% for mechanic in mechanics%}
                 <option value="{{mechanic.id}}">{{mechanic}}</option>
                 {% endfor %}
             </select>
             
             
-            <input type="date" name="date">
+            <input type="date" name="date" required>
             <button type="submit">How many slots are free?</button>
         </form>
 
