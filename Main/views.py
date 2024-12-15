@@ -5,33 +5,34 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 
 def client(request):
+    mechanics = Mechanics.objects.all()
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
             x = form.save(commit=False)
             if len(x.customer_phone)<11 or len(x.customer_phone)>11:
                 messages.error(request, 'Phone number must be 11 digits!')
-                return render(request, 'client.html', {'form': form})
+                return render(request, 'client.html', {'form': form, 'mechanics': mechanics})
             for i in x.customer_phone:
                 if i not in '0123456789':
                     messages.error(request, 'Phone number must contain only digits!')
-                    return render(request, 'client.html', {'form': form})
+                    return render(request, 'client.html', {'form': form, 'mechanics': mechanics})
             for i in x.car_regi_num:
                 if i not in '0123456789':
                     messages.error(request, 'Registration number must contain only digits!')
-                    return render(request, 'client.html', {'form': form})
+                    return render(request, 'client.html', {'form': form, 'mechanics': mechanics})
             if Appointments.objects.filter(customer_phone=x.customer_phone, date=x.date).exists():
-                messages.error(request, 'Appointment already booked for this date!')
-                return render(request, 'client.html', {'form': form})
+                messages.error(request, 'You already booked an appointment for this date!')
+                return render(request, 'client.html', {'form': form, 'mechanics': mechanics})
             if Appointments.objects.filter(mechanic = x.mechanic, date=x.date).count() >= 4:
-                messages.error(request, 'Mechanic already booked for this date!')
-                return render(request, 'client.html', {'form': form})
+                messages.error(request, 'Mechanic is too busy on this date!')
+                return render(request, 'client.html', {'form': form, 'mechanics': mechanics})
             x.save()
             messages.success(request, 'Appointment booked successfully!')
             return HttpResponseRedirect('/')
     else:
         form = AppointmentForm()
-    return render(request, 'client.html', {'form': form})
+    return render(request, 'client.html', {'form': form, 'mechanics': mechanics})
 
 def admin(request):
     appoints = Appointments.objects.all()
@@ -53,7 +54,7 @@ def edit(request,id):
         if form.is_valid():
             x = form.save(commit=False)
             if Appointments.objects.filter(mechanic = x.mechanic, date=x.date).count() >= 4:
-                messages.error(request, 'Mechanic already booked for this date!')
+                messages.error(request, 'Mechanic is too busy this date!')
                 return render(request, 'edit.html', {'form': form, 'appointment': appointment})
             messages.success(request, 'Appointment updated successfully!')
             return HttpResponseRedirect('/admin')
