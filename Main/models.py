@@ -11,6 +11,7 @@ class Appointments(models.Model):
     date = models.DateField()
     customer_name = models.CharField(max_length=100)
     customer_phone = models.CharField(max_length=20)
+    car_color = models.CharField(max_length=200, default='Black')
     car_regi_num = models.CharField(max_length=200)
     car_licence = models.CharField(max_length=200, default='')
 

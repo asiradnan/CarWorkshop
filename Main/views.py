@@ -21,7 +21,7 @@ def client(request):
                 if i not in '0123456789':
                     messages.error(request, 'Registration number must contain only digits!')
                     return render(request, 'client.html', {'form': form, 'mechanics': mechanics})
-            if Appointments.objects.filter(customer_phone=x.customer_phone, date=x.date).exists():
+            if Appointments.objects.filter(car_regi_num=x.car_regi_num, date=x.date).exists():
                 messages.error(request, 'You already booked an appointment for this date!')
                 return render(request, 'client.html', {'form': form, 'mechanics': mechanics})
             if Appointments.objects.filter(mechanic = x.mechanic, date=x.date).count() >= 4:
